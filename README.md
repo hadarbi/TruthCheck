@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# 🕵️‍♀️ TruthCheck: AI-Powered Misinformation Detection Tool  
+**Author:** Hadar Biton  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+TruthCheck is a powerful, user-friendly tool that uses AI to analyze short-form social media content (like tweets, headlines, or posts). It helps detect **misinformation**, **bias**, and **questionable sources**, empowering users to think critically and spot red flags in the information they consume.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features  
+- 🧠 **AI-Powered Analysis** – Detects misleading information, bias, and lack of sources  
+- 📱 **Simple Input** – Paste any tweet, post, or headline for instant insights  
+- 🚨 **Flag Highlights** – Clear visual feedback on potential issues  
+- ⚡ **Fast & Responsive UI** – Built with React + MUI  
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Technologies  
+- **Frontend:** React.js + Material UI  
+- **Backend:** Node.js (Express, Axios)  
+- **AI Integration:** OpenAI API (ChatGPT)  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🚀 Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔐 Step 1: Set Up Your API Key  
+Create a `.env` file in the `backend/` folder, based on the provided `.env.example`:
 
-### `npm run build`
+```env
+OPEN_AI_KEY=<your-openai-api-key>
+MODEL=gpt-3.5-turbo
+PORT=3001
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+You can get an OpenAI key from [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🧱 Step 2: Install and Run the Backend
+```
+bash
+cd backend
+npm install
+node server.js
+```
 
-### `npm run eject`
+> 🔁 This starts the Express server on `http://localhost:3001`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🎨 Step 3: Install and Run the Frontend
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+cd frontend
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+> 🌐 Opens the React app at `http://localhost:3000`
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🧪 How to Use
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. ✏️ Paste any short-form text (e.g. tweet, post, or headline) into the input box
+2. 🚀 Click **"Analyze"**
+3. 🔍 Get results highlighting:
 
-### Code Splitting
+   * Misinformation flags
+   * Potential bias
+   * Lack of verifiable sources
+   * Metadata and summary
+4. 📋 Review the results and use them to critically evaluate the original content
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+> 🧠 Tip: Try testing it with controversial or viral posts to see how it responds!
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📌 Notes
 
-### Making a Progressive Web App
+* Make sure your API key is valid and within usage limits
+* The analysis is intended as an aid — always verify important claims independently
+* Works best with real social media content (English only for now)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 💡 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This is a proof of concept — suggestions and ideas are welcome!
+Feel free to fork, star, and submit pull requests.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🛡️ License
 
-### `npm run build` fails to minify
+MIT License — free to use, modify, and distribute with attribution.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
