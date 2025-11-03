@@ -40,12 +40,11 @@ export const useTextAnalysis = (initialText = '', onAnalyzed) => {
             });
 
             const data = await response.json();
-            console.log(data);
+
             if (response.ok) {
-                const content = data;
                 try {
-                    const contentJson = content;
-                    setAnalysisResult(contentJson);
+                    setAnalysisResult(data);
+                    onAnalyzed?.(data.text);
                 }
                 catch (err) {
                     setError("Failed to analyze text. Please try again later.");

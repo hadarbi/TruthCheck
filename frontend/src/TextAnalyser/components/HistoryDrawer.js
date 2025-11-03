@@ -36,14 +36,17 @@ const HistoryDrawer = ({ open, onClose, history, onSelectItem }) => {
                 </Typography>
 
                 <List>
-                    {history.map((item, idx) => (
+                    {history.map((item) => (
                         <ListItem
                             sx={{ cursor: 'pointer' }}
-                            key={idx}
+                            key={item.id}
                             button
-                            onClick={() => onSelectItem(item.fullText)}
+                            onClick={() => onSelectItem(item.text)}
                         >
-                            <ListItemText primary={item.subject} />
+                            <ListItemText
+                                primary={item.text.slice(0, 30) + (item.text.length > 30 ? '...' : '')}
+                                secondary={new Date(item.createdAt).toLocaleString()}
+                            />
                         </ListItem>
                     ))}
                 </List>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import CertaintyGauge from './CertaintyGauge';
 

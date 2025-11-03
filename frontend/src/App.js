@@ -18,19 +18,24 @@ function App() {
 
 
   useEffect(() => {
-    const stored = localStorage.getItem('analysisHistory');
-    if (stored) {
-      setHistory(JSON.parse(stored));
-    }
+    fetch('http://localhost:3001/analyze/history')
+      .then((res) => res.json())
+      .then((data) => setHistory(data))
+      .catch((err) => console.error('Failed to fetch history:', err));
   }, []);
 
-  const addToHistory = (text) => {
-    const subject = text.trim().split('\n')[0].slice(0, 30);
-    const newItem = { subject, fullText: text };
-
-    const updated = [newItem, ...history.filter((h) => h.fullText !== text)].slice(0, 20);
-    setHistory(updated);
-    localStorage.setItem('analysisHistory', JSON.stringify(updated));
+  const addToHistory = async (text) => {
+    try {
+      const response = await fetch('http://localhost:3001/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input: text, source: '' }),
+      });
+      const record = await response.json();
+      setHistory(prev => [record, ...prev]);
+    } catch (err) {
+      console.error('Failed to add to history:', err);
+    }
   };
 
 
