@@ -1,18 +1,22 @@
 import express from 'express';
 import analyzeText from '../services/openaiService';
-import { PrismaClient } from '../generated/prisma';
-const prisma = new PrismaClient();
+import { PrismaClient } from '../../generated/prisma';
+import { authenticate } from '../middlewares/authenticate';
 
+const prisma = new PrismaClient();
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
     try {
+        const userEmail = req.user.email
         const { input, source } = req.body;
         const result = await analyzeText(input, source);
+
         await prisma.analysisHistory.create({
             data: {
                 text: input,
                 result: JSON.stringify(result),
+                userEmail,
             },
         });
         res.status(200).json(result);
@@ -22,10 +26,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/history', async (req, res) => {
-    console.log('HISTORY');
+router.get('/history', authenticate, async (req, res) => {
     try {
+        const userEmail = req.user.email;
         const history = await prisma.analysisHistory.findMany({
+            where: { userEmail },
             orderBy: { createdAt: 'desc' },
         });
 

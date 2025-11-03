@@ -2,15 +2,18 @@ import { OPEN_AI_KEY, MODEL } from '../config/openaiConfig';
 import { ANALYSE_PROMPT } from './constants';
 
 interface AnalysisResult {
-    summary?: string;
-    biases?: {
-        type: string;
-        explanation: string;
-    }[];
-    certainty?: number;
-    issuesDetected?: string[];
-    analysisTime?: string;
-    [key: string]: any; // allows flexibility for extra fields
+    summary: string,
+    flags: string[],
+    factualClaims: string[],
+    potentialIssues: string[],
+    biasTypes: [
+        {
+            "type": string,
+            "explanation": string
+        }
+    ],
+    tokensUsed: number,
+    certainty: number
 }
 
 interface Message {
@@ -20,7 +23,7 @@ interface Message {
 
 export default async function analyzeText(
     inputText: string,
-    sourceText?: string
+    sourceText?: string,
 ): Promise<AnalysisResult> {
 
     const messages: Message[] = [
