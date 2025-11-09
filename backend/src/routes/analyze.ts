@@ -1,25 +1,17 @@
 import express from 'express';
-import analyzeText from '../services/openaiService';
-import { PrismaClient } from '../../generated/prisma';
+import analyzeText from '../services/openaiService/openaiService';
 import { authenticate } from '../middlewares/authenticate';
+import { getHistoryItem, insertHistoryItem } from '../services/dbManager';
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 router.post('/', authenticate, async (req, res) => {
     try {
         const userEmail = req.user.email
         const { input, source } = req.body;
-        const result = await analyzeText(input, source);
-
-        await prisma.analysisHistory.create({
-            data: {
-                text: input,
-                result: JSON.stringify(result),
-                userEmail,
-            },
-        });
-        res.status(200).json(result);
+        const analysisResult = await analyzeText(input, source);
+        await insertHistoryItem(input, source, userEmail, analysisResult);
+        res.status(200).json(analysisResult);
     } catch (error) {
         console.error('Analysis failed:', error);
         res.status(500).json({ error: 'Failed to analyze input text.' });
@@ -29,10 +21,7 @@ router.post('/', authenticate, async (req, res) => {
 router.get('/history', authenticate, async (req, res) => {
     try {
         const userEmail = req.user.email;
-        const history = await prisma.analysisHistory.findMany({
-            where: { userEmail },
-            orderBy: { createdAt: 'desc' },
-        });
+        const history = getHistoryItem(userEmail);
 
         res.status(200).json(history);
     } catch (error) {

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { GOOGLE_CLIENT_ID } from "../../TextAnalyser/constants";
 import { Avatar, Box, Menu, MenuItem, Typography, Divider } from "@mui/material";
+import { useAuthContext } from "../../../../context/AuthContext";
+import { GOOGLE_CLIENT_ID } from "../../../../config";
+import { useApiClient } from "../../../../common/apiClient";
 
 declare global {
     interface Window {
@@ -12,12 +14,10 @@ interface GoogleAuthButtonProps {
 }
 
 const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
-    const [user, setUser] = useState<any>(() => {
-        const stored = localStorage.getItem("truthcheck_user");
-        return stored ? JSON.parse(stored) : null;
-    });
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const anchorRef = useRef<HTMLDivElement | null>(null);
+    const { user, setUser, setToken } = useAuthContext();
+    const { googleLogin } = useApiClient();
 
     useEffect(() => {
         if (!window.google || user) return;
@@ -37,21 +37,14 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
     }, [user]);
 
     const onGoogleLoginComplete = async (response: any) => {
-        const res = await fetch("http://localhost:3001/auth/google-login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ credential: response.credential }),
-        });
-        const userResponse = await res.json();
-        localStorage.setItem("truthcheck_user", JSON.stringify(userResponse));
-        localStorage.setItem("token", response.credential);
+        const userResponse = await googleLogin(response.credential);
         setUser(userResponse);
+        setToken(response.credential);
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("truthcheck_user");
-        localStorage.removeItem("token");
-        setUser(null);
+        setUser(undefined);
+        setToken("");
         setIsMenuOpen(false);
     };
 

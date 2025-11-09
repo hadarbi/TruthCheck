@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField, Button, Box, Stack, Alert } from '@mui/material';
-import { MAX_CHARACTERS } from "../constants";
-import { useAnalysis } from '../../../AnalysisContext';
+import { useAnalysisContext } from '../../../../context/AnalysisContext';
+import { MAX_CHARACTERS } from '../../../../config';
 
 interface InputSectionProps {
     handleAnalyze: (input: string, source: string) => Promise<void>;
@@ -12,7 +12,7 @@ const InputSection: React.FC<InputSectionProps> = ({
     handleAnalyze,
     resetResult,
 }) => {
-    const { inputText, setInputText, sourceText, setSourceText, isLoading } = useAnalysis();
+    const { inputText, setInputText, sourceText, setSourceText, isLoading } = useAnalysisContext();
     const isInputTooLong = inputText.length > MAX_CHARACTERS;
 
     const handleClear = () => {

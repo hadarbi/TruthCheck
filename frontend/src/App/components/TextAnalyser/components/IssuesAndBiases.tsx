@@ -3,7 +3,7 @@ import { Box, Paper, Typography, Tooltip } from '@mui/material';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FlagsList from './FlagsList';
 import BiasTypesList from './BiasTypesList';
-import { AnalysisResult } from '../../../AnalysisContext';
+import { AnalysisResult } from '../../../../types/AnalysisResult';
 
 interface Props {
     flags: AnalysisResult['flags'],

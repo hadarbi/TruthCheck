@@ -1,9 +1,12 @@
-import { MAX_CHARACTERS } from "../constants";
-import { useAnalysis, AnalysisResult } from '../../../AnalysisContext';
+import { useAnalysisContext } from '../../../../context/AnalysisContext';
+import { AnalysisResult } from "../../../../types/AnalysisResult";
+import { MAX_CHARACTERS } from '../../../../config';
+import { useApiClient } from '../../../../common/apiClient';
 
 
 export const useTextAnalysis = () => {
-    const { analysisResult, setAnalysisResult, isLoading, setIsLoading, error, setError } = useAnalysis();
+    const { analysisResult, setAnalysisResult, isLoading, setIsLoading, error, setError } = useAnalysisContext();
+    const { analyze } = useApiClient();
 
     const handleAnalyze = async (input: string, source: string): Promise<void> => {
         const isTooLong = input.length > MAX_CHARACTERS;
@@ -13,33 +16,9 @@ export const useTextAnalysis = () => {
         setIsLoading(true);
         setError(undefined);
         setAnalysisResult(undefined);
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch("http://localhost:3001/analyze", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify({ input, source }),
-            });
-
-            const data: AnalysisResult = await response.json();
-
-            if (response.ok) {
-                setAnalysisResult(data);
-            } else {
-                throw new Error("Unknown error");
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Failed to analyze text. Please try again later.");
-            }
-        } finally {
-            setIsLoading(false);
-        }
+        const data: AnalysisResult = await analyze(input, source);
+        setAnalysisResult(data);
+        setIsLoading(false);
     };
 
     const resetResult = () => {

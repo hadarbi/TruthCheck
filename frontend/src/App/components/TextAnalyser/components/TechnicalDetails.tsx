@@ -1,11 +1,11 @@
 import React from 'react';
 import { Paper, Typography, Box } from '@mui/material';
-import { MODEL } from '../constants';
-import { AnalysisResult } from '../../../AnalysisContext';
+import { AnalysisResult } from '../../../../types/AnalysisResult';
 
 interface TechnicalDetailsProps {
     tokensUsed: AnalysisResult['tokensUsed'];
     analysisTime: AnalysisResult['analysisTime'];
+    modelUsed: AnalysisResult['modelUsed'];
 }
 
 interface GridItem {
@@ -13,9 +13,9 @@ interface GridItem {
     value: string | number;
 }
 
-const TechnicalDetails: React.FC<TechnicalDetailsProps> = ({ tokensUsed, analysisTime }) => {
+const TechnicalDetails: React.FC<TechnicalDetailsProps> = ({ tokensUsed, analysisTime, modelUsed }) => {
     const items: GridItem[] = [
-        { label: 'Model Used', value: MODEL },
+        { label: 'Model Used', value: modelUsed },
         { label: 'Tokens Used', value: tokensUsed ?? 'N/A' },
         {
             label: 'Analysis Time',

@@ -4,21 +4,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import GoogleAuthButton from './components/GoogleAuthButton';
 import HistoryDrawer from './components/HistoryDrawer';
 import Balloon from './components/Balloon';
-import { useAnalysis } from '../../AnalysisContext';
+import { useAnalysisContext } from '../../../context/AnalysisContext';
 
 interface Props {
 }
 
 const Header: React.FC<Props> = ({ }) => {
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-    const { resetAll, setAnalysisResult, setInputText } = useAnalysis();
+    const { resetAll, setAnalysisResult, setInputText, setSourceText } = useAnalysisContext();
 
     const onSelectHistoryItem = (historyItem: any) => {
-        console.log(historyItem);
         setIsHistoryOpen(false);
         resetAll();
-        setAnalysisResult(JSON.parse(historyItem.result));
-        setInputText(historyItem.text);
+        setAnalysisResult(historyItem.analysisResult);
+        setInputText(historyItem.inputText);
+        setSourceText(historyItem.sourceText);
     }
 
     return (

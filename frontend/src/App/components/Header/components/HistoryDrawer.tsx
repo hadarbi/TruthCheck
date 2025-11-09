@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Box, Drawer, Typography, List, ListItem, ListItemText } from '@mui/material';
+import { HistoryItem } from '../../../../types/HistoryItem';
+import { useAuthContext } from '../../../../context/AuthContext';
+import { API_URL } from '../../../../config';
+import { useApiClient } from '../../../../common/apiClient';
 
 interface HistoryDrawerProps {
     historyOpen: boolean;
     onClose: () => void;
-    onSelectItem: (historyItem: any) => void;
+    onSelectItem: (historyItem: HistoryItem) => void;
 }
 
 const HistoryDrawer: React.FC<HistoryDrawerProps> = ({ historyOpen, onClose, onSelectItem }) => {
-    const [history, setHistory] = useState<any[]>([]);
+    const { fetchHistory: fetchHistoryApi } = useApiClient();
+    const [history, setHistory] = useState<HistoryItem[]>([]);
 
     useEffect(() => {
         if (historyOpen) fetchHistory();
@@ -16,14 +21,7 @@ const HistoryDrawer: React.FC<HistoryDrawerProps> = ({ historyOpen, onClose, onS
 
     const fetchHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const res = await fetch("http://localhost:3001/analyze/history", {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-            const data = await res.json();
+            const data = await fetchHistoryApi();
             setHistory(data);
 
         } catch (err) {
@@ -66,7 +64,7 @@ const HistoryDrawer: React.FC<HistoryDrawerProps> = ({ historyOpen, onClose, onS
                             onClick={() => onSelectItem(item)}
                         >
                             <ListItemText
-                                primary={item.text.slice(0, 30) + (item.text.length > 30 ? '...' : '')}
+                                primary={item.inputText.slice(0, 30) + (item.inputText.length > 30 ? '...' : '')}
                                 secondary={new Date(item.createdAt).toLocaleString()}
                             />
                         </ListItem>

@@ -1,7 +1,8 @@
-import { OPEN_AI_KEY, MODEL } from '../config/openaiConfig';
+import { InputJsonValue } from '@prisma/client/runtime/library';
+import { OPEN_AI_KEY, LLM_MODEL } from '../../config';
 import { ANALYSE_PROMPT } from './constants';
 
-interface AnalysisResult {
+export type AnalysisResult = InputJsonValue & {
     summary: string,
     flags: string[],
     factualClaims: string[],
@@ -13,7 +14,8 @@ interface AnalysisResult {
         }
     ],
     tokensUsed: number,
-    certainty: number
+    certainty: number,
+    modelUsed: string;
 }
 
 interface Message {
@@ -48,7 +50,7 @@ export default async function analyzeText(
             "Authorization": `Bearer ${OPEN_AI_KEY}`,
         },
         body: JSON.stringify({
-            model: MODEL,
+            model: LLM_MODEL,
             messages,
             temperature: 0.7,
         }),
@@ -58,6 +60,7 @@ export default async function analyzeText(
     const content = data.choices[0].message.content;
     const result = JSON.parse(content);
     result.analysisTime = new Date().toISOString();
+    result.modelUsed = LLM_MODEL;
 
     return result;
 }

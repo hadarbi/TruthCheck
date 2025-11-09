@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Box, Paper, Typography, Alert } from '@mui/material';
-import { AnalysisResult } from '../../../AnalysisContext';
+import { AnalysisResult } from '../../../../types/AnalysisResult';
 
 interface Props {
     factualClaims: AnalysisResult['factualClaims'],

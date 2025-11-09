@@ -10,8 +10,9 @@ datasource db {
 
 model AnalysisHistory {
   id        Int      @id @default(autoincrement())
-  text      String
-  result    String
-  userEmail String   @default("guest")
+  inputText      String
+  sourceText     String
+  analysisResult    Json
+  userEmail String
   createdAt DateTime @default(now())
 }

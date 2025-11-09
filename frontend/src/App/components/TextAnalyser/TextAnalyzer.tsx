@@ -46,6 +46,7 @@ const TextAnalyzer: FC<Props> = ({ }) => {
                     <TechnicalDetails
                         tokensUsed={analysisResult.tokensUsed}
                         analysisTime={analysisResult.analysisTime}
+                        modelUsed={analysisResult.modelUsed}
                     />
                     <Disclaimer />
                 </Box>

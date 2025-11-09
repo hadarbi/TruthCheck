@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import CertaintyGauge from './CertaintyGauge';
-import { AnalysisResult } from '../../../AnalysisContext';
+import { AnalysisResult } from '../../../../types/AnalysisResult';
 
 interface AnalysisSummaryProps {
     summary: AnalysisResult['summary'],

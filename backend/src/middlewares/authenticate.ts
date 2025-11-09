@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { OAuth2Client } from 'google-auth-library';
-import dotenv from 'dotenv';
+import { GOOGLE_CLIENT_ID } from '../config';
 
-dotenv.config();
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -17,7 +15,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: GOOGLE_CLIENT_ID,
         });
 
         const payload = ticket.getPayload();
@@ -25,7 +23,6 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             return res.status(401).json({ error: "Invalid Google token" });
         }
 
-        // Attach user info to request object
         (req as any).user = {
             email: payload.email,
             name: payload.name,

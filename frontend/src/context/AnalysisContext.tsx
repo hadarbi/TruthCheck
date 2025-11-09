@@ -1,25 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { AnalysisResult } from "../types/AnalysisResult";
 
-// -----------------
-// Interface for your Analysis result
-// -----------------
-export interface AnalysisResult {
-    summary: string;
-    flags: string[];
-    factualClaims: string[];
-    potentialIssues: string[];
-    biasTypes: {
-        type: string;
-        explanation: string;
-    }[];
-    tokensUsed: number;
-    certainty: number;
-    analysisTime: string;
-}
-
-// -----------------
-// Define context type
-// -----------------
 interface AnalysisContextType {
     analysisResult?: AnalysisResult;
     setAnalysisResult: (result: AnalysisResult | undefined) => void;
@@ -39,14 +20,8 @@ interface AnalysisContextType {
     resetAll: () => void;
 }
 
-// -----------------
-// Create the context
-// -----------------
 const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
 
-// -----------------
-// Provider component
-// -----------------
 export const AnalysisProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult>();
     const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +29,6 @@ export const AnalysisProvider: React.FC<{ children: ReactNode }> = ({ children }
     const [inputText, setInputText] = useState("");
     const [sourceText, setSourceText] = useState("");
 
-    // Helper to reset everything
     const resetAll = () => {
         setAnalysisResult(undefined);
         setIsLoading(false);
@@ -84,10 +58,7 @@ export const AnalysisProvider: React.FC<{ children: ReactNode }> = ({ children }
     );
 };
 
-// -----------------
-// Custom hook for using the context
-// -----------------
-export const useAnalysis = (): AnalysisContextType => {
+export const useAnalysisContext = (): AnalysisContextType => {
     const context = useContext(AnalysisContext);
     if (!context) {
         throw new Error("useAnalysis must be used within an AnalysisProvider");
