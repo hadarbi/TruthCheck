@@ -1,6 +1,6 @@
 import { Box, Alert } from '@mui/material';
 import { useTextAnalysis } from './hooks/useTextAnalysis';
-import { useEffect, FC } from 'react';
+import { FC } from 'react';
 import InputSection from './components/InputSection';
 import AnalysisSummary from './components/AnalysisSummary';
 import IssuesAndBiases from './components/IssuesAndBiases';
@@ -9,42 +9,21 @@ import TechnicalDetails from './components/TechnicalDetails';
 import Disclaimer from './components/Disclaimer';
 
 interface Props {
-    initialText: string;
-    userEmail?: string;
 }
 
-const TextAnalyzer: FC<Props> = ({ initialText }) => {
+const TextAnalyzer: FC<Props> = ({ }) => {
     const {
-        inputText,
-        sourceText,
         analysisResult,
-        loading,
         error,
-        isTooLong,
         handleAnalyze,
-        handleClear,
-        setInputText,
-        setSourceText,
-    } = useTextAnalysis(initialText);
-
-    useEffect(() => {
-        if (initialText) {
-            setInputText(initialText);
-            handleAnalyze(initialText, sourceText);
-        }
-    }, [initialText]);
+        resetResult,
+    } = useTextAnalysis();
 
     return (
         <Box>
             <InputSection
-                inputText={inputText}
-                setInputText={setInputText}
-                isTooLong={isTooLong}
-                sourceText={sourceText}
-                setSourceText={setSourceText}
-                loading={loading}
                 handleAnalyze={handleAnalyze}
-                handleClear={handleClear}
+                resetResult={resetResult}
             />
 
             {error && (
@@ -64,7 +43,10 @@ const TextAnalyzer: FC<Props> = ({ initialText }) => {
                         factualClaims={analysisResult.factualClaims}
                         potentialIssues={analysisResult.potentialIssues}
                     />
-                    <TechnicalDetails analysisResult={analysisResult} />
+                    <TechnicalDetails
+                        tokensUsed={analysisResult.tokensUsed}
+                        analysisTime={analysisResult.analysisTime}
+                    />
                     <Disclaimer />
                 </Box>
             )}

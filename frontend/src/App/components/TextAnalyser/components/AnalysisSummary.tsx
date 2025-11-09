@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
 import CertaintyGauge from './CertaintyGauge';
+import { AnalysisResult } from '../../../AnalysisContext';
 
 interface AnalysisSummaryProps {
-    summary: string;
-    certainty: number;
+    summary: AnalysisResult['summary'],
+    certainty: AnalysisResult['certainty'],
 }
 const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ summary, certainty }) => (
     <Paper elevation={3} sx={{ p: 3, mt: 4 }}>

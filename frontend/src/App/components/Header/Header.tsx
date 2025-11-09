@@ -1,12 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import GoogleAuthButton from './components/GoogleAuthButton';
 import HistoryDrawer from './components/HistoryDrawer';
 import Balloon from './components/Balloon';
+import { useAnalysis } from '../../AnalysisContext';
 
-const Header: React.FC = () => {
-    const [historyOpen, setHistoryOpen] = useState(false);
+interface Props {
+}
+
+const Header: React.FC<Props> = ({ }) => {
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const { resetAll, setAnalysisResult, setInputText } = useAnalysis();
+
+    const onSelectHistoryItem = (historyItem: any) => {
+        console.log(historyItem);
+        setIsHistoryOpen(false);
+        resetAll();
+        setAnalysisResult(JSON.parse(historyItem.result));
+        setInputText(historyItem.text);
+    }
 
     return (
         <Box
@@ -27,16 +40,16 @@ const Header: React.FC = () => {
                 <GoogleAuthButton />
 
                 <Box sx={{ position: 'relative' }}>
-                    <IconButton onClick={() => setHistoryOpen(true)}>
+                    <IconButton onClick={() => setIsHistoryOpen(true)}>
                         <MenuIcon />
                     </IconButton>
                     <Balloon />
                 </Box>
 
                 <HistoryDrawer
-                    historyOpen={historyOpen}
-                    onClose={() => setHistoryOpen(false)}
-                    onSelectItem={(text) => console.log("Select analysis:", text)}
+                    historyOpen={isHistoryOpen}
+                    onClose={() => setIsHistoryOpen(false)}
+                    onSelectItem={onSelectHistoryItem}
                 />
             </Box>
         </Box >

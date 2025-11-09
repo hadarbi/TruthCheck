@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GOOGLE_CLIENT_ID } from "../../TextAnalyser/constants";
 import { Avatar, Box, Menu, MenuItem, Typography, Divider } from "@mui/material";
 
@@ -16,14 +16,15 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
         const stored = localStorage.getItem("truthcheck_user");
         return stored ? JSON.parse(stored) : null;
     });
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const anchorRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (!window.google || user) return;
 
         window.google.accounts.id.initialize({
             client_id: GOOGLE_CLIENT_ID,
-            callback: handleCredentialResponse,
+            callback: onGoogleLoginComplete,
         });
 
         const buttonDiv = document.getElementById("googleSignInDiv");
@@ -35,7 +36,7 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
         }
     }, [user]);
 
-    const handleCredentialResponse = async (response: any) => {
+    const onGoogleLoginComplete = async (response: any) => {
         const res = await fetch("http://localhost:3001/auth/google-login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -51,14 +52,16 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
         localStorage.removeItem("truthcheck_user");
         localStorage.removeItem("token");
         setUser(null);
-        setAnchorEl(null);
+        setIsMenuOpen(false);
     };
 
-    const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+    const handleAvatarClick = () => {
+        setIsMenuOpen(true);
     };
 
-    const handleCloseMenu = () => setAnchorEl(null);
+    const handleCloseMenu = () => {
+        setIsMenuOpen(false);
+    };
 
     return (
         <Box>
@@ -71,10 +74,11 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ }) => {
                         alt={user.name}
                         onClick={handleAvatarClick}
                         sx={{ cursor: "pointer" }}
+                        ref={anchorRef}
                     />
                     <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
+                        anchorEl={anchorRef.current}
+                        open={isMenuOpen}
                         onClose={handleCloseMenu}
                     >
                         <Box sx={{ px: 2, py: 1.5 }}>

@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { Box, Paper, Typography, Alert } from '@mui/material';
+import { AnalysisResult } from '../../../AnalysisContext';
 
 interface Props {
-    factualClaims: string[],
-    potentialIssues: string[]
+    factualClaims: AnalysisResult['factualClaims'],
+    potentialIssues: AnalysisResult['potentialIssues'],
 };
 
 const DetailedAnalysis: FC<Props> = ({ factualClaims = [], potentialIssues = [] }) => {

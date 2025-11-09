@@ -1,14 +1,11 @@
 import React from 'react';
-import { Paper, Typography, Grid } from '@mui/material';
+import { Paper, Typography, Box } from '@mui/material';
 import { MODEL } from '../constants';
-
-interface AnalysisResult {
-    tokensUsed?: number;
-    analysisTime?: string | number;
-}
+import { AnalysisResult } from '../../../AnalysisContext';
 
 interface TechnicalDetailsProps {
-    analysisResult: AnalysisResult;
+    tokensUsed: AnalysisResult['tokensUsed'];
+    analysisTime: AnalysisResult['analysisTime'];
 }
 
 interface GridItem {
@@ -16,14 +13,14 @@ interface GridItem {
     value: string | number;
 }
 
-const TechnicalDetails: React.FC<TechnicalDetailsProps> = ({ analysisResult }) => {
+const TechnicalDetails: React.FC<TechnicalDetailsProps> = ({ tokensUsed, analysisTime }) => {
     const items: GridItem[] = [
         { label: 'Model Used', value: MODEL },
-        { label: 'Tokens Used', value: analysisResult.tokensUsed ?? 'N/A' },
+        { label: 'Tokens Used', value: tokensUsed ?? 'N/A' },
         {
             label: 'Analysis Time',
-            value: analysisResult.analysisTime
-                ? new Date(analysisResult.analysisTime).toLocaleString('en-GB', {
+            value: analysisTime
+                ? new Date(analysisTime).toLocaleString('en-GB', {
                     dateStyle: 'medium',
                     timeStyle: 'short',
                     timeZone: 'Asia/Jerusalem',
@@ -38,30 +35,24 @@ const TechnicalDetails: React.FC<TechnicalDetailsProps> = ({ analysisResult }) =
                 ⚙️ Technical Details
             </Typography>
 
-            <Grid container spacing={2} sx={{ mt: 1 }} component={React.Fragment as any}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', mt: 3, gap: 6, }}>
                 {items.map((item: GridItem, idx: number) => (
-                    <Grid item xs={12} sm={4} key={idx} component={React.Fragment as any}>
-                        <Paper
-                            elevation={2}
-                            sx={{
-                                p: 2,
-                                height: 50,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                                borderRadius: 2,
-                            }}
-                        >
-                            <Typography variant="subtitle2" color="textSecondary">
-                                {item.label}
-                            </Typography>
-                            <Typography fontWeight="bold">{item.value}</Typography>
-                        </Paper>
-                    </Grid>
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            p: 2,
+                            borderRadius: 2,
+                            flex: 1,
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant="subtitle2" color="textSecondary">
+                            {item.label}
+                        </Typography>
+                        <Typography fontWeight="bold">{item.value}</Typography>
+                    </Paper>
                 ))}
-            </Grid>
+            </Box>
         </Paper>
     );
 };

@@ -1,44 +1,20 @@
 import { MAX_CHARACTERS } from "../constants";
-import { useState, useEffect } from 'react';
+import { useAnalysis, AnalysisResult } from '../../../AnalysisContext';
 
-interface AnalysisResult {
-    summary: string,
-    flags: string[],
-    factualClaims: string[],
-    potentialIssues: string[],
-    biasTypes: [
-        {
-            "type": string,
-            "explanation": string
-        }
-    ],
-    tokensUsed: number,
-    certainty: number
-}
 
-export const useTextAnalysis = (initialText: string) => {
-    const [inputText, setInputText] = useState(initialText);
-    const [sourceText, setSourceText] = useState('');
-    const [analysisResult, setAnalysisResult] = useState<AnalysisResult>();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string>();
-
-    useEffect(() => {
-        setInputText(initialText);
-    }, [initialText]);
-
-    const isTooLong = inputText.length > MAX_CHARACTERS;
+export const useTextAnalysis = () => {
+    const { analysisResult, setAnalysisResult, isLoading, setIsLoading, error, setError } = useAnalysis();
 
     const handleAnalyze = async (input: string, source: string): Promise<void> => {
+        const isTooLong = input.length > MAX_CHARACTERS;
+
         if (isTooLong || !input) return;
 
-        setLoading(true);
+        setIsLoading(true);
         setError(undefined);
         setAnalysisResult(undefined);
         const token = localStorage.getItem('token');
-        console.log(token);
         try {
-
             const response = await fetch("http://localhost:3001/analyze", {
                 method: "POST",
                 headers: {
@@ -62,27 +38,20 @@ export const useTextAnalysis = (initialText: string) => {
                 setError("Failed to analyze text. Please try again later.");
             }
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
-    const handleClear = () => {
-        setInputText('');
-        setSourceText('');
+    const resetResult = () => {
         setAnalysisResult(undefined);
         setError(undefined);
-    };
+    }
 
     return {
-        inputText,
-        sourceText,
         analysisResult,
-        loading,
         error,
-        isTooLong,
         handleAnalyze,
-        handleClear,
-        setInputText,
-        setSourceText,
-    };
-};
+        isLoading,
+        resetResult,
+    }
+}

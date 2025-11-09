@@ -3,15 +3,11 @@ import { Box, Paper, Typography, Tooltip } from '@mui/material';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import FlagsList from './FlagsList';
 import BiasTypesList from './BiasTypesList';
+import { AnalysisResult } from '../../../AnalysisContext';
 
 interface Props {
-    flags: string[],
-    biasTypes: [
-        {
-            "type": string,
-            "explanation": string
-        }
-    ]
+    flags: AnalysisResult['flags'],
+    biasTypes: AnalysisResult['biasTypes'],
 };
 
 const IssuesAndBiases: FC<Props> = ({ flags = [], biasTypes = [] }) => {

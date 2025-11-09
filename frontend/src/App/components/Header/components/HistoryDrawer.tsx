@@ -4,7 +4,7 @@ import { Box, Drawer, Typography, List, ListItem, ListItemText } from '@mui/mate
 interface HistoryDrawerProps {
     historyOpen: boolean;
     onClose: () => void;
-    onSelectItem: (text: string) => void;
+    onSelectItem: (historyItem: any) => void;
 }
 
 const HistoryDrawer: React.FC<HistoryDrawerProps> = ({ historyOpen, onClose, onSelectItem }) => {
@@ -63,7 +63,7 @@ const HistoryDrawer: React.FC<HistoryDrawerProps> = ({ historyOpen, onClose, onS
                             sx={{ cursor: 'pointer' }}
                             key={item.id}
                             component="button"
-                            onClick={() => onSelectItem(item.text)}
+                            onClick={() => onSelectItem(item)}
                         >
                             <ListItemText
                                 primary={item.text.slice(0, 30) + (item.text.length > 30 ? '...' : '')}
